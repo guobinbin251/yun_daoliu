@@ -39,6 +39,7 @@ import com.yunbao.phonelive.glide.ImgLoader;
 import com.yunbao.phonelive.http.HttpCallback;
 import com.yunbao.phonelive.http.HttpConsts;
 import com.yunbao.phonelive.http.HttpUtil;
+import com.yunbao.phonelive.httpnew.HttpService;
 import com.yunbao.phonelive.interfaces.CommonCallback;
 import com.yunbao.phonelive.interfaces.LifeCycleAdapter;
 import com.yunbao.phonelive.interfaces.OnItemClickListener;
@@ -208,6 +209,7 @@ public class LiveRoomViewHolder extends AbsViewHolder implements View.OnClickLis
                 }
             }
         };
+
     }
 
     /**

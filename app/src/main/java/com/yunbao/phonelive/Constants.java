@@ -173,5 +173,9 @@ public class Constants {
     public static final int VIDEO_SAVE_SAVE = 2;//仅保存
     public static final int VIDEO_SAVE_PUB = 3;//仅发布
 
+    public static final int RET_CODE_OK = 1000;
+    public static final int RET_NET_ERROR = 1001;
+    public static final int RET_DATA_CODE = 1002;
+
 
 }

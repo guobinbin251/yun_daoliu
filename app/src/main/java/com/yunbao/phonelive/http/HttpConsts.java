@@ -135,4 +135,7 @@ public class HttpConsts {
     public static final String GAME_EBB_BET = "gameEbbBet";
     public static final String GAME_LUCK_PAN_CREATE = "gameLuckPanCreate";
     public static final String GAME_LUCK_PAN_BET = "gameLuckPanBet";
+
+
+    public static final String GET_AD = "http://z59e0m7wnu.gzhttp.cn/ad";
 }

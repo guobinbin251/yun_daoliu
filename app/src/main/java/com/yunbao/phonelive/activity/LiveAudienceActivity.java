@@ -35,6 +35,9 @@ import com.yunbao.phonelive.game.bean.GameParam;
 import com.yunbao.phonelive.http.HttpCallback;
 import com.yunbao.phonelive.http.HttpConsts;
 import com.yunbao.phonelive.http.HttpUtil;
+import com.yunbao.phonelive.httpnew.HttpService;
+import com.yunbao.phonelive.httpnew.bean.AdItem;
+import com.yunbao.phonelive.httpnew.callback.HttpCallBack;
 import com.yunbao.phonelive.presenter.LiveLinkMicAnchorPresenter;
 import com.yunbao.phonelive.presenter.LiveLinkMicPkPresenter;
 import com.yunbao.phonelive.presenter.LiveLinkMicPresenter;
@@ -54,6 +57,7 @@ import com.yunbao.phonelive.views.LiveRoomPlayViewHolder;
 import com.yunbao.phonelive.views.LiveRoomViewHolder;
 import com.yunbao.phonelive.views.LiveTxPlayViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -237,6 +241,18 @@ public class LiveAudienceActivity extends LiveActivity {
         LiveBean liveBean = intent.getParcelableExtra(Constants.LIVE_BEAN);
         setLiveRoomData(liveBean);
         enterRoom();
+
+        HttpService.getAd(mLiveBean.getUid(), new HttpCallBack<ArrayList<AdItem>>() {
+            @Override
+            public void onSuccess(ArrayList<AdItem> data) {
+
+            }
+
+            @Override
+            public void onFailure(int errorCode, String errorMsg) {
+
+            }
+        });
     }
 
 

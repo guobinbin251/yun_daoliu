@@ -195,7 +195,6 @@ public class NewHttpUtils {
         Request request = new Request.Builder()
                 .url(url)
                 .addHeader(CONTENT_TYPE, "application/json")
-                .addHeader(TOKEN, SpUtil.getInstance().getStringValue(SpUtil.NEW_TOKEN))
                 .post(requestBody)
                 .build();
 

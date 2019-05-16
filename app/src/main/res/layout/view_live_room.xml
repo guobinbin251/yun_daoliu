@@ -353,4 +353,27 @@
             />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:layout_marginTop="106dp"
+        android:layout_marginLeft="12dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="点击注册"
+        android:background="@drawable/bg_live_corner_4"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>
+
+    <TextView
+        android:id="@+id/tv_ad_list"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="206dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="100dp"
+    />
 </RelativeLayout>

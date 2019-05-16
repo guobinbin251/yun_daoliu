@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_live_pk"
+    >
+
+    <FrameLayout
+        android:id="@+id/play_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <com.yunbao.phonelive.custom.MyViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        />
+
+    <FrameLayout
+        android:id="@+id/page_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="106dp"
+        android:layout_marginLeft="12dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:text="点击注册"
+        android:background="@drawable/bg_live_corner_4"
+        android:textColor="@color/white"
+        android:textSize="14sp"/>
+</FrameLayout>

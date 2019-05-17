@@ -241,18 +241,6 @@ public class LiveAudienceActivity extends LiveActivity {
         LiveBean liveBean = intent.getParcelableExtra(Constants.LIVE_BEAN);
         setLiveRoomData(liveBean);
         enterRoom();
-
-        HttpService.getAd(mLiveBean.getUid(), new HttpCallBack<ArrayList<AdItem>>() {
-            @Override
-            public void onSuccess(ArrayList<AdItem> data) {
-
-            }
-
-            @Override
-            public void onFailure(int errorCode, String errorMsg) {
-
-            }
-        });
     }
 
 

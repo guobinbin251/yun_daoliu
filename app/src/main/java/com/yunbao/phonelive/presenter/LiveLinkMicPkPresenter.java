@@ -95,6 +95,8 @@ public class LiveLinkMicPkPresenter implements View.OnClickListener {
 
     public void setLiveUid(String liveUid) {
         mLiveUid = liveUid;
+
+
     }
 
     /**

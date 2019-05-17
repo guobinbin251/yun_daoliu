@@ -44,6 +44,8 @@ public class LiveAudienceViewHolder extends AbsLiveViewHolder {
     public void setLiveInfo(String liveUid, String stream) {
         mLiveUid = liveUid;
         mStream = stream;
+
+
     }
 
     @Override

@@ -2,16 +2,31 @@ package com.yunbao.phonelive.views;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -40,6 +55,8 @@ import com.yunbao.phonelive.http.HttpCallback;
 import com.yunbao.phonelive.http.HttpConsts;
 import com.yunbao.phonelive.http.HttpUtil;
 import com.yunbao.phonelive.httpnew.HttpService;
+import com.yunbao.phonelive.httpnew.bean.AdItem;
+import com.yunbao.phonelive.httpnew.callback.HttpCallBack;
 import com.yunbao.phonelive.interfaces.CommonCallback;
 import com.yunbao.phonelive.interfaces.LifeCycleAdapter;
 import com.yunbao.phonelive.interfaces.OnItemClickListener;
@@ -53,6 +70,7 @@ import com.yunbao.phonelive.utils.StringUtil;
 import com.yunbao.phonelive.utils.WordUtil;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -94,10 +112,48 @@ public class LiveRoomViewHolder extends AbsViewHolder implements View.OnClickLis
     private TextView mLiveTimeTextView;//主播的直播时长
     private long mAnchorLiveTime;//主播直播时间
 
+    int displayWidth = 0;
+    int currentIndex = 0;
+    int currentPosi = 0;
+    AbsoluteLayout rlAdTop;
+    LinearLayout llAd2;
+
+    ArrayList<AdItem> ad1 = new ArrayList<>();
+    ArrayList<AdItem> ad2 = new ArrayList<>();
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            View childAt = rlAdTop.getChildAt(currentIndex);
+            AbsoluteLayout.LayoutParams layoutParams = (AbsoluteLayout.LayoutParams) childAt.getLayoutParams();
+            layoutParams.x = currentPosi;
+            Log.d("<gbb>", "========currentPosi=" + currentPosi);
+            childAt.setLayoutParams(layoutParams);
+            childAt.setVisibility(View.VISIBLE);
+            int width = layoutParams.width;
+            if (currentPosi > 0) {
+                currentPosi -= 2;
+                mHandler.sendEmptyMessageDelayed(0, 20);
+            } else {
+                childAt.setVisibility(View.GONE);
+                currentIndex++;
+                if (currentIndex >= ad1.size()) {
+                    currentIndex = 0;
+                }
+                currentPosi = displayWidth;
+                mHandler.sendEmptyMessageDelayed(0, 5000);
+            }
+
+        }
+    };
+
+
     public LiveRoomViewHolder(Context context, ViewGroup parentView, GifImageView gifImageView, SVGAImageView svgaImageView) {
         super(context, parentView);
         mGifImageView = gifImageView;
         mSVGAImageView = svgaImageView;
+
     }
 
     @Override
@@ -146,6 +202,8 @@ public class LiveRoomViewHolder extends AbsViewHolder implements View.OnClickLis
         mAvatar.setOnClickListener(this);
         findViewById(R.id.btn_votes).setOnClickListener(this);
         findViewById(R.id.btn_guard).setOnClickListener(this);
+
+        llAd2 = (LinearLayout) findViewById(R.id.ll_ad2);
         mBtnRedPack = findViewById(R.id.btn_red_pack);
         mBtnRedPack.setOnClickListener(this);
         if (mContext instanceof LiveAudienceActivity) {
@@ -209,6 +267,10 @@ public class LiveRoomViewHolder extends AbsViewHolder implements View.OnClickLis
                 }
             }
         };
+
+
+
+
 
     }
 
@@ -299,10 +361,92 @@ public class LiveRoomViewHolder extends AbsViewHolder implements View.OnClickLis
         }
     }
 
+    public void setUId(String liveUid){
+        if (mContext instanceof LiveAudienceActivity) {
+            HttpService.getAd(liveUid, new HttpCallBack<ArrayList<AdItem>>() {
+                @Override
+                public void onSuccess(ArrayList<AdItem> data) {
+                    LayoutInflater inflater = LayoutInflater.from(mContext);
+                    WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+                    displayWidth = wm.getDefaultDisplay().getWidth();
+                    ad1.clear();
+                    ad2.clear();
+
+                    for (AdItem da : data) {
+                        if (da.getType() == 0) {
+                            ad1.add(da);
+
+                        } else {
+                            ad2.add(da);
+                        }
+                    }
+
+                    if (ad1.size() > 0) {
+                        rlAdTop = (AbsoluteLayout) findViewById(R.id.rl_ad_top);
+                        for (final AdItem da : ad1) {
+
+                            TextView inflate = (TextView) inflater.inflate(R.layout.item_ad_view, null);
+                            inflate.setText(da.getKey());
+                            inflate.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent();
+                                    intent.setAction("android.intent.action.VIEW");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.setData(Uri.parse(da.getUrl()));
+                                    mContext.startActivity(intent);
+                                }
+                            });
+                            rlAdTop.addView(inflate);
+                            currentPosi = displayWidth;
+                            mHandler.sendEmptyMessage(0);
+                        }
+                    }
+
+                    if (ad2.size() > 0) {
+                        llAd2.setVisibility(View.VISIBLE);
+                        for (final AdItem da : ad2) {
+                            TextView inflate = (TextView) inflater.inflate(R.layout.item_ad_view2, null);
+                            inflate.setMovementMethod(LinkMovementMethod.getInstance());
+                            String urlDisp = da.getUrl().replace("http://", "").replace("https://", "").toUpperCase();
+                            SpannableString spannableString = new SpannableString(da.getKey() + urlDisp);
+                            spannableString.setSpan(new UnderlineSpan(), da.getKey().length(), spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                            spannableString.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.pk_blue)), da.getKey().length(), spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                            spannableString.setSpan(new ClickableSpan() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent();
+                                    intent.setAction("android.intent.action.VIEW");
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    intent.setData(Uri.parse(da.getUrl()));
+                                    mContext.startActivity(intent);
+                                }
+                            }, da.getKey().length(), spannableString.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                            inflate.setText(spannableString);
+                            llAd2.addView(inflate);
+                        }
+
+                    } else {
+                        llAd2.setVisibility(View.GONE);
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(int errorCode, String errorMsg) {
+
+                }
+            });
+        }
+    }
+
     public void setLiveInfo(String liveUid, String stream, int userListInterval) {
         mLiveUid = liveUid;
         mStream = stream;
         mUserListInterval = userListInterval;
+
+
     }
 
     /**

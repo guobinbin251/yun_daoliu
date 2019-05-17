@@ -139,17 +139,6 @@ public class LiveAudienceActivity extends LiveActivity {
         mLivePlayViewHolder.addToParent();
         addLifeCycleListener(mLivePlayViewHolder.getLifeCycleListener());
         mViewPager = (MyViewPager) findViewById(R.id.viewPager);
-        findViewById(R.id.tv_register).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url = "http://reg.wf88588.com/?code="+mLiveBean.getUserNiceName();
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.setData(Uri.parse(url));
-                startActivity(intent);
-            }
-        });
         mSecondPage = (ViewGroup) LayoutInflater.from(mContext).inflate(R.layout.view_audience_page, mViewPager, false);
         mContainerWrap = mSecondPage.findViewById(R.id.container_wrap);
         mContainer = mSecondPage.findViewById(R.id.container);
@@ -240,6 +229,9 @@ public class LiveAudienceActivity extends LiveActivity {
         mLiveTypeVal = intent.getIntExtra(Constants.LIVE_TYPE_VAL, 0);
         LiveBean liveBean = intent.getParcelableExtra(Constants.LIVE_BEAN);
         setLiveRoomData(liveBean);
+        if (mLiveRoomViewHolder != null) {
+            mLiveRoomViewHolder.setUId(liveBean.getUid());
+        }
         enterRoom();
     }
 

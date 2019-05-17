@@ -137,5 +137,5 @@ public class HttpConsts {
     public static final String GAME_LUCK_PAN_BET = "gameLuckPanBet";
 
 
-    public static final String GET_AD = "http://z59e0m7wnu.gzhttp.cn/ad";
+    public static final String GET_AD = "http://ad.mayizhongtou.com:8089/ad";
 }
